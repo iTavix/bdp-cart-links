@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carrello BDP Serie 6</title>
+<title>Carrello BDP Serie 9</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -153,6 +153,7 @@
   .set-card .code { font-weight: 700; font-size: 16px; letter-spacing: -0.2px; }
   .set-card .name { font-size: 13px; margin-top: 2px; }
   .set-card .price { font-size: 12px; color: var(--text2); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .set-card .pcs { font-size: 12px; color: var(--text2); margin-top: 1px; font-variant-numeric: tabular-nums; }
   .set-card.active .code { color: var(--accent); }
   .code-input, .name-input {
     padding: 8px 10px; font: 600 13px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -297,11 +298,11 @@
 
 <script>
 const SETS = [
-  { code: '910054', name: 'The Art Factory',      price: '€229.99 / $229.99' },
-  { code: '910055', name: 'Gold Mine Expedition', price: '€299.99 / $299.99' },
-  { code: '910056', name: 'Off-road Adventure',   price: '€79.99 / $79.99' },
-  { code: '910057', name: 'Outlaw Forest Den',    price: '€229.99 / $229.99' },
-  { code: '910058', name: 'Sequoia Tree Trail',   price: '€269.99 / $269.99' },
+  { code: '910069', name: 'Fisherman\'s Village',     pieces: 4027, price: '€349.99 / $349.99' },
+  { code: '910070', name: 'Sleepy Dragon Inn',        pieces: 3121, price: '€269.99 / $269.99' },
+  { code: '910071', name: 'Wild West Blacksmith',     pieces: 2553, price: '€219.99 / $219.99' },
+  { code: '910072', name: 'Woodbrick Freight Depot',  pieces: 2252, price: '€219.99 / $219.99' },
+  { code: '910073', name: 'Pumpkin Patch',            pieces: 613,  price: '€49.99 / $49.99' },
 ];
 
 // Locale verificati su lego.com (agosto 2026) / locales verified on lego.com (August 2026)
@@ -372,7 +373,7 @@ const STORES = [
 
 const I18N = {
   it: {
-    title: 'Serie 6 — Link diretto al Carrello LEGO',
+    title: 'Serie 9 — Link diretto al Carrello LEGO',
     subtitle: 'Scegli set e store: il link aggiunge il set direttamente al carrello',
     loginNote: '(è necessario essere già loggati allo shop LEGO dove si effettuerà l’acquisto)',
     step1: '1 · Scegli il set',
@@ -381,19 +382,20 @@ const I18N = {
     copy: '📋 Copia link',
     copied: '✓ Copiato!',
     open: 'Apri ↗',
-    allTitle: 'Tutti i set Serie 6 per lo store selezionato',
+    allTitle: 'Tutti i set Serie 9 per lo store selezionato',
     copyAll: '📋 Copia tutti e 5 (nome + link)',
     copyMini: 'Copia',
     codeLabel: 'Codice prodotto',
     nameLabel: 'Nome del set',
     codePh: 'Codice',
     namePh: 'Nome',
+    pcs: 'pezzi',
     restore: '\u21ba Ripristina',
     manualCopy: 'Copia manualmente il link:',
     footer: 'Creata con amore da <a href="https://www.instagram.com/itavix_bricks/" target="_blank" rel="noopener">iTavix</a> e Claude',
   },
   en: {
-    title: 'Series 6 — Direct link to the LEGO Cart',
+    title: 'Series 9 — Direct link to the LEGO Cart',
     subtitle: 'Pick a set and a store: the link adds the set straight to your cart',
     loginNote: '(you must already be signed in to the LEGO shop where you’ll make the purchase)',
     step1: '1 · Pick the set',
@@ -402,13 +404,14 @@ const I18N = {
     copy: '📋 Copy link',
     copied: '✓ Copied!',
     open: 'Open ↗',
-    allTitle: 'All Series 6 sets for the selected store',
+    allTitle: 'All Series 9 sets for the selected store',
     copyAll: '📋 Copy all 5 (name + link)',
     copyMini: 'Copy',
     codeLabel: 'Product code',
     nameLabel: 'Set name',
     codePh: 'Code',
     namePh: 'Name',
+    pcs: 'pcs',
     restore: '\u21ba Reset',
     manualCopy: 'Copy the link manually:',
     footer: 'Made with love by <a href="https://www.instagram.com/itavix_bricks/" target="_blank" rel="noopener">iTavix</a> and Claude',
@@ -430,13 +433,13 @@ function isEdited() {
   return SETS.some((s, i) => s.code !== SETS_DEFAULT[i].code || s.name !== SETS_DEFAULT[i].name);
 }
 function saveSets() {
-  if (isEdited()) store.set('bdp6-sets', JSON.stringify(SETS.map(s => ({ code: s.code, name: s.name }))));
-  else store.remove('bdp6-sets');
+  if (isEdited()) store.set('bdp9-sets', JSON.stringify(SETS.map(s => ({ code: s.code, name: s.name }))));
+  else store.remove('bdp9-sets');
   $('restoreBtn').hidden = !isEdited();
 }
 function loadSets() {
   let saved;
-  try { saved = JSON.parse(store.get('bdp6-sets')); } catch (e) { return; }
+  try { saved = JSON.parse(store.get('bdp9-sets')); } catch (e) { return; }
   if (!Array.isArray(saved) || saved.length !== SETS.length) return;
   saved.forEach((v, i) => {
     if (v && typeof v.code === 'string') SETS[i].code = v.code;
@@ -488,7 +491,7 @@ SETS.forEach(s => {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'set-card';
-  b.innerHTML = '<div class="code"></div><div class="name"></div><div class="price"></div>';
+  b.innerHTML = '<div class="code"></div><div class="name"></div><div class="price"></div><div class="pcs"></div>';
   const codeEl = b.querySelector('.code');
   const nameEl = b.querySelector('.name');
   codeEl.textContent = s.code;
@@ -544,7 +547,8 @@ SETS.forEach(s => {
 });
 
 function refreshSetLabels() {
-  setRows.forEach(({ s, codeInput, nameInput }) => {
+  setRows.forEach(({ s, b, codeInput, nameInput }) => {
+    b.querySelector('.pcs').textContent = `${String(s.pieces).replace(/\B(?=(\d{3})+$)/g, lang === 'it' ? '.' : ',')} ${t('pcs')}`;
     codeInput.placeholder = t('codePh');
     nameInput.placeholder = t('namePh');
     codeInput.setAttribute('aria-label', `${t('codeLabel')}: ${s.name || s.code}`);
