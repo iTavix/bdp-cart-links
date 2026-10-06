@@ -133,6 +133,7 @@
   .set-item { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .set-fields { display: flex; gap: 6px; }
   .set-card {
+    display: flex; align-items: center; gap: 12px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
@@ -155,11 +156,20 @@
     background: var(--glass-strong);
     box-shadow: 0 0 0 1px var(--accent);
   }
+  .set-card .thumb { flex: 0 0 88px; height: 66px; border-radius: 10px; background: #fff; display: grid; place-items: center; overflow: hidden; }
+  .set-card .thumb img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .set-card .txt { flex: 1; min-width: 0; }
   .set-card .title { display: flex; align-items: baseline; gap: 8px; font-size: 16px; letter-spacing: -0.2px; white-space: nowrap; min-width: 0; }
   .set-card .code { font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums; }
   .set-card .name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .set-card .data { margin-top: 3px; font-size: 13px; color: var(--text2); font-variant-numeric: tabular-nums; }
   .set-card .price::before { content: "\00b7"; margin: 0 6px; }
+  @media (max-width: 480px) {
+    .set-card { gap: 10px; padding: 10px 12px; }
+    .set-card .thumb { flex-basis: 64px; height: 50px; border-radius: 8px; }
+    .set-card .title { font-size: clamp(13px, 3.9vw, 16px); gap: 6px; }
+    .set-card .data { font-size: 12px; }
+  }
   .set-card.active .code { color: var(--accent); }
   .code-input, .name-input {
     padding: 8px 10px; font: 600 13px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -304,11 +314,11 @@
 
 <script>
 const SETS = [
-  { code: '910069', name: 'Fisherman\'s Village',     pieces: 4027, price: '€349.99 / $349.99' },
-  { code: '910070', name: 'Sleepy Dragon Inn',        pieces: 3121, price: '€269.99 / $269.99' },
-  { code: '910071', name: 'Wild West Blacksmith',     pieces: 2553, price: '€219.99 / $219.99' },
-  { code: '910072', name: 'Woodbrick Freight Depot',  pieces: 2252, price: '€219.99 / $219.99' },
-  { code: '910073', name: 'Pumpkin Patch',            pieces: 613,  price: '€49.99 / $49.99' },
+  { code: '910069', name: 'Fisherman\'s Village',     pieces: 4027, price: '€349.99 / $349.99', img: 'img/910069.jpg' },
+  { code: '910070', name: 'Sleepy Dragon Inn',        pieces: 3121, price: '€269.99 / $269.99', img: 'img/910070.jpg' },
+  { code: '910071', name: 'Wild West Blacksmith',     pieces: 2553, price: '€219.99 / $219.99', img: 'img/910071.jpg' },
+  { code: '910072', name: 'Woodbrick Freight Depot',  pieces: 2252, price: '€219.99 / $219.99', img: 'img/910072.jpg' },
+  { code: '910073', name: 'Pumpkin Patch',            pieces: 613,  price: '€49.99 / $49.99', img: 'img/910073.jpg' },
 ];
 
 // Locale verificati su lego.com (agosto 2026) / locales verified on lego.com (August 2026)
@@ -509,7 +519,8 @@ SETS.forEach(s => {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'set-card';
-  b.innerHTML = '<div class="title"><span class="code"></span><span class="name"></span></div><div class="data"><span class="pcs"></span><span class="price"></span></div>';
+  b.innerHTML = '<div class="thumb"><img alt="" loading="lazy" decoding="async"></div><div class="txt"><div class="title"><span class="code"></span><span class="name"></span></div><div class="data"><span class="pcs"></span><span class="price"></span></div></div>';
+  b.querySelector('img').src = s.img;
   const codeEl = b.querySelector('.code');
   const nameEl = b.querySelector('.name');
   codeEl.textContent = s.code;
