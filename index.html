@@ -92,7 +92,12 @@
   header h1 { font-size: 40px; font-weight: 800; letter-spacing: 1px; line-height: 1; }
   .serie-title { font-size: 17px; font-weight: 600; letter-spacing: -0.2px; margin-top: 10px; }
   header .sub { color: var(--text2); font-size: 13px; margin-top: 3px; }
-  header .note { color: var(--text2); font-size: 12px; margin-top: 2px; font-style: italic; }
+  .guide { list-style: none; counter-reset: g; margin-top: 12px; padding: 12px 14px; border-radius: 16px; display: grid; gap: 7px; }
+  .guide li { counter-increment: g; display: flex; gap: 9px; font-size: 13px; line-height: 1.35; }
+  .guide li::before { content: counter(g); flex: 0 0 18px; height: 18px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; margin-top: 1px; }
+  .guide b { font-weight: 600; }
+  .guide .tip { color: var(--text2); font-size: 12px; }
+  .guide .tip::before { content: "!"; background: var(--text2); }
   .brand-logo { height: 60px; width: auto; display: block; }
   .logo-link { flex-shrink: 0; border-radius: 8px; }
   .logo-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -265,7 +270,7 @@
     </div>
     <div class="serie-title" id="serieTitle"></div>
     <div class="sub" id="subtitle"></div>
-    <div class="note" id="loginNote"></div>
+    <ol class="guide glass-panel" id="guide"></ol>
   </header>
 
   <div class="step-head">
@@ -375,8 +380,14 @@ const STORES = [
 const I18N = {
   it: {
     title: 'Serie 9 — Link diretto al Carrello LEGO',
-    subtitle: 'Scegli set e store: il link aggiunge il set direttamente al carrello',
-    loginNote: '(è necessario essere già loggati allo shop LEGO dove si effettuerà l’acquisto)',
+    subtitle: 'Genera il link che aggiunge un set BDP direttamente al tuo carrello LEGO.',
+    guide: [
+      '<b>Accedi</b> al tuo account sullo shop LEGO dove comprerai (es. lego.com/it-it).',
+      '<b>Scegli il set</b> toccando la sua scheda.',
+      '<b>Scegli lo store</b> del paese in cui hai fatto l’accesso.',
+      '<b>Apri</b> il link per aggiungere il set al carrello, oppure <b>copialo</b> per condividerlo.',
+    ],
+    tip: 'Carrello vuoto? Controlla di aver fatto l’accesso proprio allo store scelto.',
     step1: '1 · Scegli il set',
     step2: '2 · Scegli lo store',
     selectStore: '— seleziona lo store —',
@@ -397,8 +408,14 @@ const I18N = {
   },
   en: {
     title: 'Series 9 — Direct link to the LEGO Cart',
-    subtitle: 'Pick a set and a store: the link adds the set straight to your cart',
-    loginNote: '(you must already be signed in to the LEGO shop where you’ll make the purchase)',
+    subtitle: 'Get a link that adds a BDP set straight to your LEGO cart.',
+    guide: [
+      '<b>Sign in</b> to the LEGO shop where you’ll buy (e.g. lego.com/en-us).',
+      '<b>Pick the set</b> by tapping its card.',
+      '<b>Pick the store</b> for the country you signed in to.',
+      '<b>Open</b> the link to add the set to your cart, or <b>copy</b> it to share.',
+    ],
+    tip: 'Empty cart? Make sure you’re signed in to the exact store you picked.',
     step1: '1 · Pick the set',
     step2: '2 · Pick the store',
     selectStore: '— select a store —',
@@ -471,7 +488,7 @@ function applyLang(l) {
   $('langEn').classList.toggle('on', l === 'en');
   $('serieTitle').textContent = t('title');
   $('subtitle').textContent = t('subtitle');
-  $('loginNote').textContent = t('loginNote');
+  $('guide').innerHTML = t('guide').map(s => `<li><span>${s}</span></li>`).join('') + `<li class="tip"><span>${t('tip')}</span></li>`;
   $('step1').textContent = t('step1');
   $('step2').textContent = t('step2');
   $('footer').innerHTML = t('footer');
